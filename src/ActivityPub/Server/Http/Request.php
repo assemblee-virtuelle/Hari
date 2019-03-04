@@ -57,6 +57,17 @@ class Request
     }
 
     /**
+     * Returns the instance of the GuzzleHTTP clent
+     *
+     * @return Client
+     */
+    public function getClient()
+    {
+      return $this->client;
+    }
+
+
+    /**
      * Set HTTP methods
      *
      * @param string $method
@@ -91,7 +102,7 @@ class Request
         }
 
         $content = $this->client->get($url)->getBody()->getContents();
-        
+
         CacheHelper::set($url, $content);
 
         return $content;
