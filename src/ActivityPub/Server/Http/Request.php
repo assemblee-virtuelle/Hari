@@ -57,7 +57,7 @@ class Request
     }
 
     /**
-     * Returns the instance of the GuzzleHTTP clent
+     * Returns the instance of the GuzzleHTTP client
      *
      * @return Client
      */

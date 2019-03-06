@@ -52,11 +52,33 @@ $handle4 = 'datagueule@peertube.datagueule.tv';
 // ]
 
 
+$data = [
+  '@context' => 'https://www.w3.org/ns/activitystreams',
+  'type' => 'Note',
+  'to' => '["https://phpc.social/users/Nasuk"]',
+  'attributedTo' => 'https://mamot.fr/@tchevengour',
+  'content' => 'Test Note'
+];
+
+$jdata = json_encode($data);
+var_dump($jdata);
+//var_dump($_SERVER);
+$xserv = $_SERVER;
+$xserv['HTTP_ACCEPT'] = 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"';
+var_dump($xserv);
+// $r = new R();
+$req = new Request($_GET, $_POST, [], $_COOKIE, $_FILES, $xserv, $jdata);
+
+// $ra = $r->get('https://mamot.fr/@tchevengour');
+
+
+//var_dump($ra);
+var_dump(Util::decodeJson((string)$req->getContent()));
+var_dump($req->headers->get('accept'));
+
+var_dump(Helper::validateAcceptHeader($req->headers->get('accept')));
+
+
 // Test Post
-// $outbox = $server->outbox($handle);
-// var_dump($_SERVER);
-// $req = Request::createFromGlobals();
-// var_dump($req->headers);
-// //$req->headers['accept'];
-// $post = $outbox->post($req);
-// var_dump($post);
+$ot = $outbox->post($req);
+var_dump($ot);

@@ -113,6 +113,11 @@ class Actor
         }
 
         //var_dump($content);
+
+        if ($content['name'] == '') {
+          $content['name'] = 'noNameYet';
+        }
+        
         if (array_key_exists('toot', $content['@context'][2])) {
 
           $this->actor = Type::create('Mastodon'.$content['type'], $content);
