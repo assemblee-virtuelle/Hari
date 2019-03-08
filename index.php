@@ -8,7 +8,11 @@ require __DIR__.'/vendor/autoload.php';
 
 use ActivityPub\Type;
 use ActivityPub\Server;
+use ActivityPub\Type\Util;
+use ActivityPub\Server\Helper;
+use ActivityPub\Server\Http\Request as R;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 
 // Create a server instance
@@ -22,15 +26,11 @@ $handle1 = 'phpc@phpc.social';
 $handle3 = 'https://videos.lescommuns.org/accounts/albertrognard';
 $handle4 = 'datagueule@peertube.datagueule.tv';
 
-//  Test Outbox
-// [
-  // Get an actor's outbox as an OrderedCollection
+// Get an actor's outbox as an OrderedCollection
 
-  $outbox = $server->outbox($handle1);
+$outbox = $server->outbox($handle1);
 
-  $page = $outbox->getPage($outbox->get()->first)->orderedItems;
-
-
+$page = $outbox->getPage($outbox->get()->first)->orderedItems;
 
 
 // Affichage des données de la outbox
@@ -49,34 +49,31 @@ $handle4 = 'datagueule@peertube.datagueule.tv';
     echo 'Url : <a href="'.$key->object->url.'">Source</a><br>';
     echo '</div>';
   }
-// ]
 
 
+// Raw Data
 $data = [
   '@context' => 'https://www.w3.org/ns/activitystreams',
   'type' => 'Note',
-  'to' => '["https://phpc.social/users/Nasuk"]',
-  'attributedTo' => 'https://mamot.fr/@tchevengour',
-  'content' => 'Test Note'
+  'to' => 'https://phpc.social/users/Nasuk',
+  'content' => 'Test Note',
+  'published' => date('Y-m-d\TH:i:s\Z'),
+  'cc' => 'https://mamot.fr/users/tchevengour/followers'
 ];
 
 $jdata = json_encode($data);
-var_dump($jdata);
-//var_dump($_SERVER);
+
 $xserv = $_SERVER;
 $xserv['HTTP_ACCEPT'] = 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"';
-var_dump($xserv);
-// $r = new R();
+
+
 $req = new Request($_GET, $_POST, [], $_COOKIE, $_FILES, $xserv, $jdata);
 
-// $ra = $r->get('https://mamot.fr/@tchevengour');
 
-
-//var_dump($ra);
-var_dump(Util::decodeJson((string)$req->getContent()));
-var_dump($req->headers->get('accept'));
-
-var_dump(Helper::validateAcceptHeader($req->headers->get('accept')));
+// var_dump(Util::decodeJson((string)$req->getContent()));
+// var_dump($req->headers->get('accept'));
+//
+// var_dump(Helper::validateAcceptHeader($req->headers->get('accept')));
 
 
 // Test Post
